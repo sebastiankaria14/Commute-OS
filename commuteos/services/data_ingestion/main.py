@@ -77,7 +77,7 @@ class DataIngestion:
                         latitude=station_info.get('latitude', 0.0),
                         longitude=station_info.get('longitude', 0.0),
                         station_type=station_info.get('type', 'unknown'),
-                        metadata={}
+                        station_metadata={}
                     )
                     db.add(station)
                     stations_inserted += 1
@@ -123,7 +123,7 @@ class DataIngestion:
                         distance=edge_info.get('distance', 0.0),
                         travel_time=edge_info.get('travel_time', 0.0),
                         transport_type=edge_info.get('transport_type', 'unknown'),
-                        metadata={}
+                        edge_metadata={}
                     )
                     db.add(edge)
                     edges_inserted += 1

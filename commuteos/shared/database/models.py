@@ -17,7 +17,7 @@ class Station(Base):
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     station_type = Column(String(50))  # bus, metro, train, etc.
-    metadata = Column(JSON, default=dict)
+    station_metadata = Column(JSON, default=dict)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
@@ -38,7 +38,7 @@ class Edge(Base):
     distance = Column(Float, nullable=False)  # in kilometers
     travel_time = Column(Float, nullable=False)  # in minutes
     transport_type = Column(String(50))  # bus, metro, walk, etc.
-    metadata = Column(JSON, default=dict)
+    edge_metadata = Column(JSON, default=dict)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
