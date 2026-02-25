@@ -1,0 +1,128 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: commuteos_postgres
+    environment:
+      POSTGRES_DB: commuteos
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - commuteos_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: commuteos_redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    networks:
+      - commuteos_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Routing Service
+  routing_service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.routing
+    container_name: commuteos_routing
+    environment:
+      - LOG_LEVEL=INFO
+      - DEBUG=False
+      - ENVIRONMENT=production
+    ports:
+      - "8001:8001"
+    networks:
+      - commuteos_network
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+
+  # API Gateway
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: commuteos_api
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=commuteos
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ROUTING_SERVICE_HOST=routing_service
+      - ROUTING_SERVICE_PORT=8001
+      - LOG_LEVEL=INFO
+      - DEBUG=False
+      - ENVIRONMENT=production
+      - CACHE_TTL=600
+    ports:
+      - "8000:8000"
+    networks:
+      - commuteos_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      routing_service:
+        condition: service_started
+    restart: unless-stopped
+
+  # Data Ingestion (runs once on startup)
+  data_ingestion:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: commuteos_data_ingestion
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=commuteos
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - LOG_LEVEL=INFO
+    command: python -m commuteos.services.data_ingestion.main
+    networks:
+      - commuteos_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+networks:
+  commuteos_network:
+    driver: bridge
+    name: commuteos_network
+
+volumes:
+  postgres_data:
+    name: commuteos_postgres_data
+  redis_data:
+    name: commuteos_redis_data

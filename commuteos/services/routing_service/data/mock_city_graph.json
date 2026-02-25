@@ -1,0 +1,138 @@
+{
+  "stations": {
+    "Station_A": {
+      "name": "Central Station",
+      "latitude": 40.7589,
+      "longitude": -73.9851,
+      "type": "metro"
+    },
+    "Station_B": {
+      "name": "East Terminal",
+      "latitude": 40.7614,
+      "longitude": -73.9776,
+      "type": "metro"
+    },
+    "Station_C": {
+      "name": "North Hub",
+      "latitude": 40.7648,
+      "longitude": -73.9808,
+      "type": "bus"
+    },
+    "Station_D": {
+      "name": "West Plaza",
+      "latitude": 40.7580,
+      "longitude": -73.9855,
+      "type": "bus"
+    },
+    "Station_E": {
+      "name": "South Gateway",
+      "latitude": 40.7556,
+      "longitude": -73.9780,
+      "type": "metro"
+    },
+    "Station_F": {
+      "name": "University Circle",
+      "latitude": 40.7670,
+      "longitude": -73.9820,
+      "type": "metro"
+    },
+    "Station_G": {
+      "name": "Business District",
+      "latitude": 40.7600,
+      "longitude": -73.9790,
+      "type": "bus"
+    },
+    "Station_H": {
+      "name": "Airport Express",
+      "latitude": 40.7520,
+      "longitude": -73.9850,
+      "type": "train"
+    }
+  },
+  "edges": [
+    {
+      "source": "Station_A",
+      "target": "Station_C",
+      "travel_time": 12,
+      "distance": 2.5,
+      "transport_type": "metro"
+    },
+    {
+      "source": "Station_C",
+      "target": "Station_B",
+      "travel_time": 15,
+      "distance": 3.1,
+      "transport_type": "bus"
+    },
+    {
+      "source": "Station_A",
+      "target": "Station_D",
+      "travel_time": 8,
+      "distance": 1.8,
+      "transport_type": "bus"
+    },
+    {
+      "source": "Station_D",
+      "target": "Station_E",
+      "travel_time": 10,
+      "distance": 2.2,
+      "transport_type": "metro"
+    },
+    {
+      "source": "Station_E",
+      "target": "Station_B",
+      "travel_time": 18,
+      "distance": 3.8,
+      "transport_type": "metro"
+    },
+    {
+      "source": "Station_A",
+      "target": "Station_E",
+      "travel_time": 20,
+      "distance": 4.5,
+      "transport_type": "bus"
+    },
+    {
+      "source": "Station_C",
+      "target": "Station_F",
+      "travel_time": 7,
+      "distance": 1.5,
+      "transport_type": "metro"
+    },
+    {
+      "source": "Station_F",
+      "target": "Station_B",
+      "travel_time": 10,
+      "distance": 2.0,
+      "transport_type": "metro"
+    },
+    {
+      "source": "Station_A",
+      "target": "Station_G",
+      "travel_time": 14,
+      "distance": 2.8,
+      "transport_type": "bus"
+    },
+    {
+      "source": "Station_G",
+      "target": "Station_B",
+      "travel_time": 11,
+      "distance": 2.3,
+      "transport_type": "bus"
+    },
+    {
+      "source": "Station_D",
+      "target": "Station_H",
+      "travel_time": 16,
+      "distance": 3.5,
+      "transport_type": "train"
+    },
+    {
+      "source": "Station_H",
+      "target": "Station_E",
+      "travel_time": 9,
+      "distance": 1.9,
+      "transport_type": "train"
+    }
+  ]
+}
